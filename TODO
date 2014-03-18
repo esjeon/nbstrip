@@ -1,0 +1,13 @@
+
+Bugs
+----
+ - does not work with already stripped scripts (fix removeCache)
+
+Features
+--------
+ - output removal should be optional
+ - print usage
+
+Others
+------
+ - Find a way to not display any Mathematica windows during the execution
