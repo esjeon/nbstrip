@@ -6,6 +6,7 @@ Features
 --------
  - output removal should be optional
  - print usage
+ - command-line arguments
 
 Others
 ------
