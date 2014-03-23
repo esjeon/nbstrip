@@ -9,8 +9,8 @@ removeOutputCells[nb_] :=
   Replace[nb, HoldPattern[Cell[_,"Output",__]]   -> Sequence[], 5]
 
 removeChangeTime[nb_] := (
-  Replace[nb, HoldPattern[CellChangeTimes->{__}] -> Sequence[], 6]
-  // Replace[#, HoldPattern[TrackCellChangeTimes->True] -> Sequence[], 1] &
+  Replace[nb, HoldPattern[CellChangeTimes->{__}] -> Sequence[], Infinity]
+  // Replace[#, HoldPattern[TrackCellChangeTimes->True] -> Sequence[], 5] &
 )
 
 removeWinInfo[nb_] :=
@@ -20,7 +20,7 @@ removeWinInfo[nb_] :=
 disableCache[nb_] :=
   With[{ opts = Rest[List @@ nb] },
   With[{ privopt = PrivateNotebookOptions /. opts },
-  With[{ flag    = "FileOutlineCache" /. privopt },
+  With[{ flag    = Check["FileOutlineCache" /. privopt, false] },
     Which[( "Symbol" == SymbolName[Head[privopt]] ),
             Append[nb, PrivateNotebookOptions -> {"FileOutlineCache" -> False}],
           ( TrueQ[flag] ),
@@ -37,9 +37,9 @@ disableCache[nb_] :=
 (* TODO: handle fail case *)
 removeCacheInfo[nb_] := (
   ExportString[nb, "NB"]
-  // StringSplit[#, "(* Beginning of Notebook Content *)"][[2]] &
+  // Last[StringSplit[#, "(* Beginning of Notebook Content *)"]] &
   // StringReplace[#, RegularExpression["^\\s"] -> ""] &
-  // StringSplit[#, "(* End of Notebook Content *)"][[1]] &
+  // First[StringSplit[#, "(* End of Notebook Content *)"]] &
 )
 
 
