@@ -1,6 +1,6 @@
 
-nbstrip - Mathematica notebook cleaner
-======================================
+nb-strip - Mathematica notebook cleaner
+=======================================
 
 This Mathematica script strips off a Mathematica notebook of useless meta data,
 cache data, and CellChangeTime. It also adds some flags to prevent the addition
