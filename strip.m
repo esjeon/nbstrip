@@ -21,11 +21,29 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 *)
 
+Check[
+  Needs["ParseArg`", DirectoryName[$InputFileName] <> "ParseArg.m"],
+  WriteString["stderr", "got an error while loading ParseArg.m. Exiting...\n"]; Exit[1]
+]
+
+(* configs *)
+Begin["Config`"]
+  input = ""
+  output = "output.nb"
+End[]
+
 
 die[msg_, n_] := (
   WriteString["stderr", msg, "\n"];
   Exit[n]
 )
+
+printUsage[] :=
+  With[{name = FileNameTake[First[$ScriptCommandLine]]},
+    WriteString["stdout",
+      "Usage: " <> name <> " [-h] [-o output-file] input-file\n"
+    ]
+  ];
 
 removeOutputCells[nb_] :=
   Replace[nb, HoldPattern[Cell[_,"Output",__]]   -> Sequence[], 5]
@@ -74,26 +92,36 @@ processFile[filename_] := (
   // disableCache
   // removeCacheInfo
 )
-                
 
-main[argc_, argv_] :=
-  Which[(argc == 1), WriteString["stderr", "a filename is required", "\n"];
-                     1,
-        (argc != 2), WriteString["stderr", "TODO: Usage\n"];
-                     1,
-        (True), With[{ filename = argv[[2]] },
-                  WriteString["stderr", "processing ", filename, "\n"];
-                  (
-                    processFile[filename]
-                    // Check[#, die["an error has occured while processing " <> filename, 255]] &
-                    // WriteString[OpenWrite["output.nb"], #] &
-                    // Check[#, die["failed to write to the output file", 100]] &
-                  )
-                ];
-                0
-  ] // Quit
+(* parse arguments *)
+Catch[
+  ParseArg`ParseArg[Rest[$ScriptCommandLine],
+    {
+      "o" :> (output = ReadString[]),
+      "h" :> (printUsage[]; Exit[0]),
+      "default" :> If[Config`input == "", Config`input = CurrentToken[]
+                                        , Throw["got multiple input files"], EParseArg],
+      _ :> Throw["Invalid flag -" <> CurrentFlag[], EParseArg]
+    }
+  ],
+  EParseArg,
+  ( WriteString["stderr", "Error: " <> ToString[#1] <> "\n"]
+  ; printUsage[]
+  ; Exit[1]
+  ) &
+]
 
+(* verify arguments *)
+If[Config`input == "", die["no input file is given", 1], Null]
 
-main[Length[$ScriptCommandLine],
-     $ScriptCommandLine]
+(* process file *)
+Module[{nb, fp},
+  Check[nb = processFile[Config`input],
+    die["an error has occured while processing " <> Config`input, 255]];
 
+  Check[fp = OpenWrite[Config`output],
+    die["cannot open output file '" <> Config`output <> "' for writing", 1]];
+
+  Check[WriteString[fp, nb],
+    die["failed to write to the output file", 100]];
+]
