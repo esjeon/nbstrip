@@ -60,7 +60,7 @@ removeWinInfo[nb_] :=
 disableCache[nb_] :=
   With[{ opts = Rest[List @@ nb] },
   With[{ privopt = PrivateNotebookOptions /. opts },
-  With[{ flag    = Check["FileOutlineCache" /. privopt, false] },
+  With[{ flag    = Quiet[Check["FileOutlineCache" /. privopt, false], ReplaceAll::reps] },
     Which[( "Symbol" == SymbolName[Head[privopt]] ),
             Append[nb, PrivateNotebookOptions -> {"FileOutlineCache" -> False}],
           ( TrueQ[flag] ),

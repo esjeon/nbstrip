@@ -1,8 +1,6 @@
 
 Bugs
 ----
- - "PrivateNotebookOptions" is not being replaced, and causes an error
-   -> In "disableCache", "opts" is not recognized as a pattern
 
 Features
 --------
