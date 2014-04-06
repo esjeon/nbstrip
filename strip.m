@@ -84,8 +84,7 @@ removeCacheInfo[nb_] := (
 
 
 processFile[filename_] := (
-  Import[filename, "NB"]
-  // Check[ #, die["Failed to import" <> filename, 2] ] &
+  Check[Import[filename, "NB"], die["Failed to import" <> filename, 2]]
   // removeOutputCells
   // removeChangeTime
   // removeWinInfo

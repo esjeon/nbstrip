@@ -1,8 +1,6 @@
 
 Bugs
 ----
- - function "Check" is being used incorrectly 
-   -> it's a LEXICAL construction
  - "PrivateNotebookOptions" is not being replaced, and causes an error
    -> In "disableCache", "opts" is not recognized as a pattern
 
