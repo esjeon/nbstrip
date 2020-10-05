@@ -96,7 +96,7 @@ processFile[filename_] := (
 Catch[
   ParseArg`ParseArg[Rest[$ScriptCommandLine],
     {
-      "o" :> (output = ReadString[]),
+      "o" :> (Config`output = ReadString[]),
       "h" :> (printUsage[]; Exit[0]),
       "default" :> If[Config`input == "", Config`input = CurrentToken[]
                                         , Throw["got multiple input files"], EParseArg],
