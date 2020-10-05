@@ -22,7 +22,12 @@ DEALINGS IN THE SOFTWARE.
 *)
 
 Check[
-  Needs["ParseArg`", DirectoryName[$InputFileName] <> "ParseArg.m"],
+  Needs["ParseArg`",
+    FileNameJoin[{
+      DirectoryName[FileInformation[$InputFileName, "AbsoluteFileName"]],
+      "ParseArg.m"
+    }]
+  ],
   WriteString["stderr", "got an error while loading ParseArg.m. Exiting...\n"]; Exit[1]
 ]
 
