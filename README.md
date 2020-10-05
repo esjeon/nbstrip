@@ -14,3 +14,16 @@ Usage
 
 This will generate `output.nb` in the working directory.
 
+Options
+-------
+
+ * `-h`: Print help message.
+
+ * `-O`: Do *NOT* strip "Output" cells.
+
+ * `-o`: The name of output file. By default, this value is generated from input
+   file name. Examples:
+
+        *.nb -> *.strip.nb
+        *.cdf -> *.strip.cdf
+
