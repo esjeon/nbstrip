@@ -29,7 +29,7 @@ Check[
 (* configs *)
 Begin["Config`"]
   input = ""
-  output = "output.nb"
+  output = ""
 End[]
 
 
@@ -112,6 +112,14 @@ Catch[
 
 (* verify arguments *)
 If[Config`input == "", die["no input file is given", 1], Null]
+
+If[Config`output == "",
+  Config`output = StringReplace[Config`input, {
+    ".nb" -> ".strip.nb",
+    ".cdf" -> ".strip.cdf"
+  }],
+  Null
+]
 
 (* process file *)
 Module[{nb, fp},
