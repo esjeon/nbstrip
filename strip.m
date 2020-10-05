@@ -46,11 +46,11 @@ printUsage[] :=
   ];
 
 removeOutputCells[nb_] :=
-  Replace[nb, HoldPattern[Cell[_,"Output",__]]   -> Sequence[], 5]
+  Replace[nb, HoldPattern[Cell[_,"Output",__]]   -> Sequence[], Infinity]
 
 removeChangeTime[nb_] := (
   Replace[nb, HoldPattern[CellChangeTimes->{__}] -> Sequence[], Infinity]
-  // Replace[#, HoldPattern[TrackCellChangeTimes->True] -> Sequence[], 5] &
+  // Replace[#, HoldPattern[TrackCellChangeTimes->True] -> Sequence[], Infinity] &
 )
 
 removeWinInfo[nb_] :=
