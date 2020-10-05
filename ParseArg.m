@@ -22,7 +22,7 @@ DEALINGS IN THE SOFTWARE.
 
 BeginPackage["ParseArg`"]
 
-ParseArg[args_,pats_]:=
+ParseArg[argv_,pats_]:=
   Block[{ CurrentFlag, CurrentToken, ReadString, ReadNumber, ReadChar},
   Module[{ as, cs, flg, tok },
     CurrentFlag[] := flg;
@@ -63,7 +63,7 @@ ParseArg[args_,pats_]:=
         ]
       ];
 
-    For[as = args, Length[as] > 0, as = Rest[as],
+    For[as = argv, Length[as] > 0, as = Rest[as],
       tok = First[as];
       flg = "";
       cs = Characters[First[as]];

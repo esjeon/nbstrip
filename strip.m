@@ -1,4 +1,4 @@
-#!/home/eon/bin/MathematicaScript -script
+#!/usr/bin/env wolframscript
 (*
 Copyright © 2014 Eon S. Jeon <esjeon@hyunmu.am>
 
