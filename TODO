@@ -4,9 +4,7 @@ Bugs
 
 Features
 --------
- - output removal should be optional
  - remove "Print" cells
 
 Others
 ------
- - Find a way to not display any Mathematica windows during the execution

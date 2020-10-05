@@ -30,6 +30,7 @@ Check[
 Begin["Config`"]
   input = ""
   output = ""
+  keepOutputCell = False
 End[]
 
 
@@ -41,7 +42,7 @@ die[msg_, n_] := (
 printUsage[] :=
   With[{name = FileNameTake[First[$ScriptCommandLine]]},
     WriteString["stdout",
-      "Usage: " <> name <> " [-h] [-o output-file] input-file\n"
+      "Usage: " <> name <> " [-h] [-O] [-o output-file] input-file\n"
     ]
   ];
 
@@ -85,7 +86,7 @@ removeCacheInfo[nb_] := (
 
 processFile[filename_] := (
   Check[Import[filename, "NB"], die["Failed to import" <> filename, 2]]
-  // removeOutputCells
+  // If[Config`keepOutputCell, #, removeOutputCells[#]] &
   // removeChangeTime
   // removeWinInfo
   // disableCache
@@ -96,8 +97,9 @@ processFile[filename_] := (
 Catch[
   ParseArg`ParseArg[Rest[$ScriptCommandLine],
     {
-      "o" :> (Config`output = ReadString[]),
       "h" :> (printUsage[]; Exit[0]),
+      "O" :> (Config`keepOutputCell = True),
+      "o" :> (Config`output = ReadString[]),
       "default" :> If[Config`input == "", Config`input = CurrentToken[]
                                         , Throw["got multiple input files"], EParseArg],
       _ :> Throw["Invalid flag -" <> CurrentFlag[], EParseArg]
